@@ -6,7 +6,7 @@ let display = document.getElementById("display");
 
 const numberButtons = document.querySelectorAll(".buttons > .number");
 const operators = document.querySelectorAll(".operator");
-const equalSign = document.getElementById("equalSign");
+const equalSign = document.getElementById("equal");
 const clearBtn = document.getElementById("clr");
 const deleteBtn = document.getElementById("del");
 
@@ -26,6 +26,14 @@ operators.forEach((button) => {
     if (operation === "÷") operation = "/";
     appendOperation(operation);
   });
+});
+
+clearBtn.addEventListener("click", () => {
+  clearDisplay();
+});
+
+equalSign.addEventListener("click", () => {
+  operate();
 });
 
 function appendNumber(number) {
@@ -70,6 +78,10 @@ function operate() {
     default:
       return;
   }
+  currentInput = result.toString();
+  previousInput = "";
+  currentOperation = "";
+  display.value = currentInput;
 }
 
 function clearDisplay() {
