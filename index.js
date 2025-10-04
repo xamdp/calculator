@@ -1,41 +1,80 @@
-let currentOpr = null;
-let firstOperand = null;
-let secondOperand = null;
-let result = null;
-let display = document.getElementById("userinput");
+let currentInput = "";
+let currentOperation = "";
+let previousInput = "";
 
-const numberButtons = document.querySelectorAll(".btns > .number");
+let display = document.getElementById("display");
+
+const numberButtons = document.querySelectorAll(".buttons > .number");
 const operators = document.querySelectorAll(".operator");
-const equalSign = document.getElementById("equal");
+const equalSign = document.getElementById("equalSign");
 const clearBtn = document.getElementById("clr");
 const deleteBtn = document.getElementById("del");
 
-let currentOperation = null;
-
-numberButtons.forEach((btn) => {
-  btn.onclick = function (btn) {
-    display.placeholder += btn.target.value;
-  };
+// event lister for number buttons
+numberButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const number = button.textContent;
+    appendNumber(number);
+  });
 });
 
-operators.forEach((op) => {
-  op.onclick = function (evt) {
-    display.placeholder = evt.target.value;
-  };
+// event lister for button operators
+operators.forEach((button) => {
+  button.addEventListener("click", () => {
+    let operation = button.textContent;
+    if (operation === "×") operation = "*";
+    if (operation === "÷") operation = "/";
+    appendOperation(operation);
+  });
 });
 
-const add = function (num1, num2) {
-  return num1 + num2;
-};
+function appendNumber(number) {
+  currentInput += number;
+  display.value = `${previousInput} ${currentOperation} ${currentInput}`;
+}
 
-const subtract = function (num1, num2) {
-  return num1 - num2;
-};
+function appendOperation(operation) {
+  if (currentInput === "") return;
+  if (previousInput !== "") {
+    operate();
+  }
+  currentOperation = operation;
+  previousInput = currentInput;
+  currentInput = "";
+  display.value = `${previousInput} ${currentOperation}`;
+}
 
-const multiply = function (numbers) {
-  return numbers.reduce((product, current) => product * current);
-};
+function operate() {
+  if (previousInput === "" || currentInput === "") return;
+  let result;
+  let prev = parseFloat(previousInput);
+  let current = parseFloat(currentInput);
 
-const divide = function (num1, num2) {
-  return num1 / num2;
-};
+  switch (currentOperation) {
+    case "+":
+      result = prev + current;
+      break;
+    case "-":
+      result = prev - current;
+      break;
+    case "*":
+      result = prev * current;
+      break;
+    case "/":
+      if (current === 0) {
+        alert("Cannot divide by zero");
+        return;
+      }
+      result = prev / current;
+      break;
+    default:
+      return;
+  }
+}
+
+function clearDisplay() {
+  currentInput = "";
+  previousInput = "";
+  currentOperation = "";
+  display.value = "";
+}
