@@ -10,6 +10,9 @@ const equalSign = document.getElementById("equal");
 const clearBtn = document.getElementById("clr");
 const deleteBtn = document.getElementById("del");
 
+const alertUser = document.getElementById("alert");
+const closeBtn = document.querySelector(".closebtn");
+
 // event lister for number buttons
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -34,6 +37,10 @@ clearBtn.addEventListener("click", () => {
 
 equalSign.addEventListener("click", () => {
   operate();
+});
+
+closeBtn.addEventListener("click", () => {
+  alertUser.style.display = "none";
 });
 
 function appendNumber(number) {
@@ -70,7 +77,7 @@ function operate() {
       break;
     case "/":
       if (current === 0) {
-        alert("Cannot divide by zero");
+        alertUser.style.display = "inline";
         return;
       }
       result = prev / current;
