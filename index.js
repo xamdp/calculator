@@ -42,6 +42,18 @@ clearBtn.addEventListener("click", () => {
   clearDisplay();
 });
 
+deleteBtn.addEventListener("click", () => {
+  if (currentInput !== "") {
+    currentInput = currentInput.slice(0, -1);
+  } else if (currentOperation !== "") {
+    currentOperation = "";
+    justCalculated = false;
+  } else if (previousInput !== "") {
+    previousInput = previousInput.slice(0, -1);
+  }
+  display.value = `${previousInput} ${currentOperation} ${currentInput}`;
+});
+
 equalSign.addEventListener("click", () => {
   operate();
 });
@@ -50,32 +62,26 @@ closeBtn.addEventListener("click", () => {
   alertUser.style.display = "none";
 });
 
-// sub function that checks
-function ifDecimal(currentInput) {
-  if (currentInput === ".") {
-    previousInput += currentInput;
-  }
-  return;
-}
-
 function appendNumber(number) {
   if (justCalculated) {
     currentInput = "";
     justCalculated = false;
   }
+  if (number === "." && currentInput.includes(".")) return;
   currentInput += number;
-  ifDecimal(currentInput);
   display.value = `${previousInput} ${currentOperation} ${currentInput}`;
 }
 
 function appendOperation(operation) {
-  if (currentInput === "") return;
-  if (previousInput !== "") {
+  if (currentInput === "" && previousInput === "") return;
+  if (previousInput !== "" && currentInput !== "") {
     operate();
   }
   currentOperation = operation;
-  previousInput = currentInput;
-  currentInput = "";
+  if (currentInput !== "") {
+    previousInput = currentInput;
+    currentInput = "";
+  }
   display.value = `${previousInput} ${currentOperation}`;
 }
 
